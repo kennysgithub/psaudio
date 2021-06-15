@@ -340,6 +340,28 @@ static struct snd_rpi_simple_drvdata drvdata_pifi_mini_210 = {
 	.fixed_bclk_ratio = 64,
 };
 
+SND_SOC_DAILINK_DEFS(psaudio_octave,
+	DAILINK_COMP_ARRAY(COMP_EMPTY()),
+	DAILINK_COMP_ARRAY(COMP_CODEC("ps-octave-codec", "ps-octave-hifi")),
+	DAILINK_COMP_ARRAY(COMP_EMPTY()));
+
+static struct snd_soc_dai_link snd_psaudio_octave_dai[] = {
+	{
+		.name		= "PS Audio Octave",
+		.stream_name	= "Octave I2S Playback",
+		.dai_fmt	= SND_SOC_DAIFMT_I2S |
+					SND_SOC_DAIFMT_NB_NF |
+					SND_SOC_DAIFMT_CBS_CFS,
+		SND_SOC_DAILINK_REG(psaudio_octave),
+	},
+};
+
+static struct snd_rpi_simple_drvdata drvdata_psaudio_octave = {
+	.card_name	= "PS Audio Octave Streamer",
+	.dai		= snd_psaudio_octave_dai,
+	.fixed_bclk_ratio = 64,
+};
+
 static const struct of_device_id snd_rpi_simple_of_match[] = {
 	{ .compatible = "adi,adau1977-adc",
 		.data = (void *) &drvdata_adau1977 },
@@ -356,6 +378,8 @@ static const struct of_device_id snd_rpi_simple_of_match[] = {
 		.data = (void *) &drvdata_merus_amp },
 	{ .compatible = "pifi,pifi-mini-210",
 		.data = (void *) &drvdata_pifi_mini_210 },
+	{ .compatible = "psaudio,octave-streamer",
+	        .data = (void *) &drvdata_psaudio_octave },
 	{},
 };
 

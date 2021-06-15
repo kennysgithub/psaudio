@@ -1,0 +1,60 @@
+// Definitions for PS Audio Octave Streamer
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2835";
+
+	fragment@0 {
+		target = <&i2s>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	fragment@1 {
+		target = <&gpio>;
+		__overlay__ {
+			psaudiooctave_pins: psaudiooctave_pins {
+				/* FIXME get real values from Bob and Barry */
+				brcm,pins = <17 27 22 23 24 25>;
+				brcm,function = <1 1 1 1 1 1>;	/* all outs */
+				brcm,pull = <0 0 0 0 0 0>; /* all pull-ups FIXME?*/
+			};
+		};
+        };
+
+	fragment@2 {
+		target-path = "/";
+		__overlay__ {
+			ps-octave-codec {
+				#sound-dai-cells = <0>;
+				compatible = "psaudio,octave";
+
+				/* FIXME get real values from Bob and Barry */
+				/* but no labels, so punt for now */
+				pinctrl-names = "default";
+				pinctrl-0 = <&psaudiooctave_pins>;
+
+				fpga_mute-gpios = <&gpio 17 0>; /* required entry if PS Audio */
+				fpga_dsd-gpios  = <&gpio 27 0>;
+				fpga_48s-gpios  = <&gpio 22 0>;
+				fpga_rate_bit0-gpios = <&gpio 23 0>;
+				fpga_rate_bit1-gpios = <&gpio 24 0>;
+				fpga_rate_bit2-gpios = <&gpio 25 0>;
+
+				status = "okay";
+
+			};
+		};
+	};
+
+	fragment@3 {
+		target = <&sound>;
+		__overlay__ {
+			compatible = "psaudio,octave-streamer";
+			i2s-controller = <&i2s>;
+			status = "okay";
+		};
+	};
+};

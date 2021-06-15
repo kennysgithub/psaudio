@@ -317,3 +317,9 @@ config SND_RPI_WM8804_SOUNDCARD
 	help
 	  Say Y or M if you want to add support for the Raspberry Pi
           generic driver for WM8804 based soundcards.
+
+config SND_PSAUDIO_OCTAVE
+	tristate "Support for I2S output on PS Audio Octave Streamer"
+	help
+	  Say Y or M if you want to add support I2S audio
+	  on the PS Audio Octave Streamer
