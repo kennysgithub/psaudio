@@ -320,6 +320,8 @@ config SND_RPI_WM8804_SOUNDCARD
 
 config SND_PSAUDIO_OCTAVE
 	tristate "Support for I2S output on PS Audio Octave Streamer"
+	select SND_BCM2835_SOC_I2S
+	select SND_RPI_SIMPLE_SOUNDCARD
 	help
 	  Say Y or M if you want to add support I2S audio
 	  on the PS Audio Octave Streamer
